@@ -10,6 +10,9 @@ contract Kryptobird{
         symbol = 'KBIRDZ';
     }
 
+    
+
+
 
 }
 
