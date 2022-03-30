@@ -40,8 +40,11 @@ contract ERC721{
     ///  about them do throw.
     /// @param _tokenId The identifier for an NFT
     /// @return The address of the owner of the NFT
-    
+
     function ownerOf(uint256 _tokenId) external view returns (address){
+        address owner = _tokenOwner[_tokenId];
+        require(owner != address(0),'owner query for non-existstent token');
+        return owner; 
 
     }
 
@@ -53,11 +56,11 @@ contract ERC721{
     }
 
 
-    function _mint(address to, uint256 tokenId) internal{
+    function _mint(address to, uint256 tokenId) internal virtual{
         //requires the address isn't zero
         require(to != address(0),'ERC721: minting to the zero address');
         //requires that the token does not already exist
-        require(!_exists(tokenId),'ERC721: takoen already minted');
+        require(!_exists(tokenId),'ERC721: token already minted');
         //we are adding a new address with a token id for minting
         _tokenOwner[tokenId] = to;
         //keeping track of each address that is minting and adding one
