@@ -36,8 +36,6 @@ contract ERC721 is ERC165, IERC721{
     // Mappin from token id to approvec addresses
     mapping(uint => address) private _tokenApprovals;
 
-
-    // EXERCISE 
     // 1.REGISTER THE INTERFACE FOR THE ERC721 so that it includes 
     // the following functions: balanceOf, ownerOf, transferFrom
     // *note by register the interface: write the constructors with the 
@@ -48,6 +46,7 @@ contract ERC721 is ERC165, IERC721{
 
     // 3. REGISTER THE INTERFACE FOR THE ERC721Metadata contract so that includes 
     // name and the symbol functions
+    
     constructor(){
         _registerInterface(bytes4(keccak256('balanceOf(bytes4)')^
         keccak256('ownerOf(bytes4)')^keccak256('transferFrom(bytes4)')));
