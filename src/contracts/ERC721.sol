@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
+import './interfaces/IERC721.sol';
+import './ERC165.sol';
+
     /*
     building out the minting function:
         a. nft to point to an address
@@ -11,16 +15,16 @@ pragma solidity ^0.8.0;
 
     */
 
-contract ERC721{
+contract ERC721 is ERC165, IERC721{
 
-    event Transfer(
-        address indexed from, 
-        address indexed to, 
-        uint indexed tokenId);
-    event Approval(
-        address indexed owner,
-        address indexed approved,
-        uint256 indexed tokenId);
+    // event Transfer(
+    //     address indexed from, 
+    //     address indexed to, 
+    //     uint indexed tokenId);
+    // event Approval(
+    //     address indexed owner,
+    //     address indexed approved,
+    //     uint256 indexed tokenId);
     
 
     // mapping in solidity creates a hash table of key pair values
@@ -32,11 +36,12 @@ contract ERC721{
     // Mappin from token id to approvec addresses
     mapping(uint => address) private _tokenApprovals;
 
-/// @notice Count all NFTs assigned to an owner
-    /// @dev NFTs assigned to the zero address are considered invalid, and this
-    ///  function throws for queries about the zero address.
-    /// @param _owner An address for whom to query the balance
-    /// @return The number of NFTs owned by `_owner`, possibly zero
+
+    // EXERCISE REGISTER THE INTERFACE FOR THE ERC721 so that it
+    constructor(){
+        _registerInterface(bytes4(keccak256('supportsInterface(bytes4)')));
+    }
+
 
     function balanceOf(address _owner) public view returns(uint256){
         require(_owner != address(0),'owner query for non-existstent token');
@@ -98,7 +103,7 @@ contract ERC721{
         emit Transfer(_from, _to, _tokenId);
     }
 
-    function transferFrom(address _from, address _to, uint256 _tokenId) public{
+    function transferFrom(address _from, address _to, uint256 _tokenId) override public{
         require(isApprovedOrOwner(msg.sender, _tokenId));
         _transferFrom(_from, _to, _tokenId);
     }
