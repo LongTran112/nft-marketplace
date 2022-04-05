@@ -37,9 +37,20 @@ contract ERC721 is ERC165, IERC721{
     mapping(uint => address) private _tokenApprovals;
 
 
-    // EXERCISE REGISTER THE INTERFACE FOR THE ERC721 so that it
+    // EXERCISE 
+    // 1.REGISTER THE INTERFACE FOR THE ERC721 so that it includes 
+    // the following functions: balanceOf, ownerOf, transferFrom
+    // *note by register the interface: write the constructors with the 
+    // according byte conversions
+
+    // 2. REGISTER THE INTERFACE FOR THE ERC721Enumerable contract so that it includes
+    // totalSupply, tokenByIndex, tokenOfOwnerByindex functions
+
+    // 3. REGISTER THE INTERFACE FOR THE ERC721Metadata contract so that includes 
+    // name and the symbol functions
     constructor(){
-        _registerInterface(bytes4(keccak256('supportsInterface(bytes4)')));
+        _registerInterface(bytes4(keccak256('balanceOf(bytes4)')^
+        keccak256('ownerOf(bytes4)')^keccak256('transferFrom(bytes4)')));
     }
 
 
@@ -57,7 +68,6 @@ contract ERC721 is ERC165, IERC721{
         address owner = _tokenOwner[_tokenId];
         require(owner != address(0),'owner query for non-existstent token');
         return owner; 
-
     }
 
 
