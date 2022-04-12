@@ -100,7 +100,26 @@ class App extends Component{
                         <main role='main' className='col-lg-12 d-flex text-center'>
                             <div className='content mr-auto ml-auto'
                             style={{opacity:'0.8'}}>
-                                <h1>KryptoBirdz - NFT Marketplace</h1>
+                                <h1 style ={{color: 'white'}}>
+                                    KryptoBirdz - NFT Marketplace</h1>
+                                <form onSubmit={(event) =>{
+                                    event.preventDefault();
+                                    const kryptoBird = this.kryptoBird.value
+                                    this.mint(kryptoBird)
+                                }}>
+                                    <input 
+                                    type='text'
+                                    placeholder ='Add a file location'
+                                    className='form-control mb-1'
+                                    ref={(input) =>{this.kryptoBird = input}}
+                                    />
+                                    <input style={{margin :'6px'}}
+                                    type='submit'
+                                    className='btn btn-primary btn-black'
+                                    value ='MINT'
+                                    />
+
+                                </form>
 
                             </div>
 
