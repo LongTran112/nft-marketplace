@@ -24,29 +24,57 @@ class App extends Component{
     };
  
     async loadBlockchainData() {
-        const web3 = window.web3
-        const accounts = await window.ethereum.request( {method: 'eth_requestAccounts'} );
-        this.setState({account: accounts});
-        // console.log(this.state.account);
-        const networkId = await web3.eth.net.getId()
-        const networkData = KryptoBird.networks[networkId]
-        if(networkData){
+        const web3 = window.web3;
+        const accounts = await web3.eth.getAccounts();
+        this.setState({ account: accounts[0] })
+
+        const networkID = await web3.eth.net.getId();
+        console.log(networkID)
+        const networkData = KryptoBird.networks[networkID];
+        console.log(networkData)
+
+        if (networkData) {
             const abi = KryptoBird.abi;
-            const address = networkData.address; 
-            const contract = new web3.eth.Contract(abi, address)
-    
-            this.setState({contract})
-            console.log(this.state.contract)
+            const address = networkData.address;
+            const contract = new web3.eth.Contract(abi, address);
+            this.setState({ contract });
+            const totalSupply = await contract.methods.totalSupply().call();
+            this.setState({ totalSupply });
+
+            for (let i = 1; i <= totalSupply; i++) {
+                const KryptoBird = await contract.methods.kryptoBirdz(i - 1).call();
+                this.setState({
+                    kryptoBirdz: [...this.state.kryptoBirdz, KryptoBird]
+                })
+            }
+            console.log(this.state.kryptoBirdz)
 
 
+        } else {
+            window.alert('Smart contract not deployed');
         }
-    };
+    }
+
+    mint = (kryptoBird) =>{
+        this.state.contract.methods.mint(kryptoBird).send({from: this.state.account})
+        .once('recepit', (receipt) =>{
+            this.setState({
+                kryptoBirdz: [...this.state.kryptoBirdz, KryptoBird]
+            })
+        })
+    }
+
+
+
+
 
     constructor(props){
         super(props);
         this.state = {
             account: '',
-            contract: null
+            contract: null,
+            totalSupply: 0,
+            kryptoBirdz: []
         }
 
     }
@@ -66,6 +94,23 @@ class App extends Component{
                         </li>
                     </ul>
                 </nav>
+
+                <div className='container-fluid mt-1'>
+                    <div className='row'>
+                        <main role='main' className='col-lg-12 d-flex text-center'>
+                            <div className='content mr-auto ml-auto'
+                            style={{opacity:'0.8'}}>
+                                <h1>KryptoBirdz - NFT Marketplace</h1>
+
+                            </div>
+
+                        </main>
+
+                    </div>
+                </div>
+
+
+
             </div>
             
         )
